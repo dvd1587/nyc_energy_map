@@ -638,7 +638,6 @@
 const API_URL = 'https://data.cityofnewyork.us/api/v3/views/5zyy-y8am/query.json';
 const APP_TOKEN = '5U3PdX83pjEizBSCi3g28npTj';
 const PAGE_SIZE = 50000;
-const TOTAL_RECORDS = 103259;
 
 const SELECT_FIELDS = [
   'property_id', 'property_name', 'address_1', 'borough',
@@ -792,11 +791,10 @@ async function fetchAllData() {
   try {
     let allData = [];
     let pageNumber = 1;
-    const totalPages = Math.ceil(TOTAL_RECORDS / PAGE_SIZE);
     
-    while (pageNumber <= totalPages + 2) {
-      loadingText.textContent = `Loading page ${pageNumber} of ~${totalPages}...`;
-      progressBar.style.width = `${(pageNumber / totalPages) * 90}%`;
+    while (true) {
+      loadingText.textContent = `Loading page ${pageNumber}... (${allData.length.toLocaleString()} records)`;
+      progressBar.style.width = `${Math.min(90, pageNumber * 8)}%`;
       
       const response = await fetchPage(pageNumber);
       
