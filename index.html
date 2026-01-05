@@ -998,17 +998,24 @@ function setupDualRangeWithInputs(config) {
   }
   
   // Slider events
+  let sliderTimer;
   minSlider.addEventListener('input', () => {
     let val = parseFloat(minSlider.value);
     if (val > currentMax) val = currentMax;
-    applyValues(val, currentMax);
-  });
-  
+    currentMin = val;
+    updateDisplay();
+    clearTimeout(sliderTimer);
+    sliderTimer = setTimeout(() => onChange(currentMin, currentMax), 150);
+    });
+    
   maxSlider.addEventListener('input', () => {
     let val = parseFloat(maxSlider.value);
     if (val < currentMin) val = currentMin;
-    applyValues(currentMin, val);
-  });
+    currentMax = val;
+    updateDisplay();
+    clearTimeout(sliderTimer);
+    sliderTimer = setTimeout(() => onChange(currentMin, currentMax), 150);
+    });
   
   // Input field events
   function handleInputChange(inputEl, isMin) {
@@ -1386,7 +1393,7 @@ function resetFilters() {
 }
 
 function initMap() {
-  map = L.map('map', { zoomControl: false }).setView([40.7128, -74.006], 11);
+  map = L.map('map', { zoomControl: false, preferCanvas: true }).setView([40.7128, -74.006], 11);
   L.control.zoom({ position: 'bottomleft' }).addTo(map);
   
   L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
@@ -1429,22 +1436,24 @@ function updateMap() {
     });
     marker.metricValue = val;
     
-    marker.bindPopup(`<div class="popup">
-      <div class="popup-header">
-        <div class="popup-title">${b.name}</div>
-        <div class="popup-address">${b.address}${b.borough ? ', ' + b.borough : ''}</div>
-      </div>
-      <div class="popup-grid">
-        <div class="popup-item"><div class="popup-item-label">Type</div><div class="popup-item-value">${b.propertyType}</div></div>
-        <div class="popup-item"><div class="popup-item-label">Year Built</div><div class="popup-item-value">${b.yearBuilt || 'N/A'}</div></div>
-        <div class="popup-item"><div class="popup-item-label">Floor Area</div><div class="popup-item-value">${formatNum(b.floorArea)} ft²</div></div>
-        <div class="popup-item"><div class="popup-item-label">Source EUI</div><div class="popup-item-value ${getValueClass(b.sourceEui, 'eui')}">${b.sourceEui ? b.sourceEui.toFixed(1) : 'N/A'}</div></div>
-        <div class="popup-item"><div class="popup-item-label">Water Use</div><div class="popup-item-value ${getValueClass(b.wui, 'wui')}">${b.wui ? b.wui.toFixed(1) : 'N/A'}</div></div>
-        <div class="popup-item"><div class="popup-item-label">GHG</div><div class="popup-item-value ${getValueClass(b.ghgIntensity, 'ghg')}">${b.ghgIntensity ? b.ghgIntensity.toFixed(2) : 'N/A'}</div></div>
-        <div class="popup-item"><div class="popup-item-label">ENERGY STAR®</div><div class="popup-item-value ${getValueClass(b.energyStarScore, 'star')}">${b.energyStarScore || 'N/A'}</div></div>
-        <div class="popup-item"><div class="popup-item-label">Report Year</div><div class="popup-item-value">${b.dataYear || 'N/A'}</div></div>
-      </div>
-    </div>`);
+    marker.on('click', function() {
+      this.bindPopup(`<div class="popup">
+        <div class="popup-header">
+          <div class="popup-title">${b.name}</div>
+          <div class="popup-address">${b.address}${b.borough ? ', ' + b.borough : ''}</div>
+        </div>
+        <div class="popup-grid">
+          <div class="popup-item"><div class="popup-item-label">Type</div><div class="popup-item-value">${b.propertyType}</div></div>
+          <div class="popup-item"><div class="popup-item-label">Year Built</div><div class="popup-item-value">${b.yearBuilt || 'N/A'}</div></div>
+          <div class="popup-item"><div class="popup-item-label">Floor Area</div><div class="popup-item-value">${formatNum(b.floorArea)} ft²</div></div>
+          <div class="popup-item"><div class="popup-item-label">Source EUI</div><div class="popup-item-value ${getValueClass(b.sourceEui, 'eui')}">${b.sourceEui ? b.sourceEui.toFixed(1) : 'N/A'}</div></div>
+          <div class="popup-item"><div class="popup-item-label">Water Use</div><div class="popup-item-value ${getValueClass(b.wui, 'wui')}">${b.wui ? b.wui.toFixed(1) : 'N/A'}</div></div>
+          <div class="popup-item"><div class="popup-item-label">GHG</div><div class="popup-item-value ${getValueClass(b.ghgIntensity, 'ghg')}">${b.ghgIntensity ? b.ghgIntensity.toFixed(2) : 'N/A'}</div></div>
+          <div class="popup-item"><div class="popup-item-label">ENERGY STAR®</div><div class="popup-item-value ${getValueClass(b.energyStarScore, 'star')}">${b.energyStarScore || 'N/A'}</div></div>
+          <div class="popup-item"><div class="popup-item-label">Report Year</div><div class="popup-item-value">${b.dataYear || 'N/A'}</div></div>
+        </div>
+      </div>`).openPopup();
+    });
     
     markersLayer.addLayer(marker);
   });
