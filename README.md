@@ -5,6 +5,10 @@
 <h2>Description</h2>
 This interactive map visualizes energy and water consumption data for nearly 35,000 buildings across all five NYC boroughs. The data comes from the NYC Open Data portal under Local Law 84 disclosure requirements. You can explore how buildings perform on: Energy Use Intensity (EUI), Water Use Intensity (WUI), Greenhouse Gas Emissions (GHG), and ENERGY STAR® Ratings.
 <br/>
+<br/>
+<p align="center">
+<a href="https://drive.google.com/uc?export=view&id=1ZEeJlhqc_DZJ9ZC2FM7kSgpxyNdOZFeC"><img src="https://drive.google.com/uc?export=view&id=1ZEeJlhqc_DZJ9ZC2FM7kSgpxyNdOZFeC" alt="Screenshot" /></a> 
+<br />
 
 <h2>Languages and Utilities Used</h2>
 
