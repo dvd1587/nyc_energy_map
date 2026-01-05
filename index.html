@@ -460,7 +460,7 @@
         .sidebar { position: fixed; left: 0; top: 0; height: 100%; z-index: 1001; transition: transform 0.3s ease; width: 85%; max-width: 360px; }
         .sidebar.collapsed { transform: translateX(-100%); }
         .sidebar-toggle { display: flex; }
-        .sidebar.not(.collapsed) ~ .sidebar-toggle { left: calc(85% + 10px); }
+        .sidebar.not(.collapsed) ~ .sidebar-toggle { display: none; }
         .map-area { width: 100%; }
         .search-bar { left:0; padding-left: 65px; }
     }
@@ -1179,10 +1179,17 @@ function initUI() {
   const sidebarToggle = document.getElementById('sidebarToggle');
     
   sidebarToggle.addEventListener('click', () => {
-    sidebar.classList.toggle('collapsed');
-    sidebarToggle.classist.toggle('active');
+    sidebar.classList.remove('collapsed');
     });
 
+ // Close sidebar when tapping on map area (mobile only)
+ document.querySelector('.map-area').addEventListener('click', () => {
+  if (window.innerWidth <= 768) {
+    sidebar.classList.add('collapsed');
+  }
+ }); 
+
+  
  // Auto-collapse on mobile
   if (window.innerWidth <= 768) {
     sidebar.classList.add('collapsed');
@@ -1192,7 +1199,8 @@ function initUI() {
   window.addEventListener('resize', () => {
     if (window.innerWidth > 768) {
       sidebar.classList.remove('collapsed');
-      sidebarToggle.classList.remove('active');
+    } else {  
+      sidebarToggle.classList.remove('collapsed');
     }  
   }); 
 }
