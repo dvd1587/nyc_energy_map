@@ -1,4 +1,4 @@
-# Interactive NYC Buildings Energy & Water Use Map - LL84
+# NYC Buildings Energy & Water Use Map - LL84
 
 ### [Interactive Map Link](https://dvd1587.github.io/nyc_energy_map)
 
