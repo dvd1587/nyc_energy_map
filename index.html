@@ -329,6 +329,15 @@
       text-align: center;
       font-size: 0.65rem; color: var(--text-muted);
     }
+
+    .copyright a {
+      color: var(--accent-secondary);
+      text-decoration: none;
+    }
+
+    .copyright a:hover {
+      text-decoration: underline;
+    }
     
     .map-area { flex: 1; display: flex; flex-direction: column; position: relative; background: var(--bg-primary); }
     
@@ -460,7 +469,6 @@
         .sidebar { position: fixed; left: 0; top: 0; height: 100%; z-index: 1001; transition: transform 0.3s ease; width: 85%; max-width: 360px; }
         .sidebar.collapsed { transform: translateX(-100%); }
         .sidebar-toggle { display: flex; }
-        .sidebar.not(.collapsed) ~ .sidebar-toggle { display: none; }
         .map-area { width: 100%; }
         .search-bar { left:0; padding-left: 65px; }
     }
@@ -1180,12 +1188,14 @@ function initUI() {
     
   sidebarToggle.addEventListener('click', () => {
     sidebar.classList.remove('collapsed');
+    sidebarToggle.style.display = 'none';
     });
 
  // Close sidebar when tapping on map area (mobile only)
  document.querySelector('.map-area').addEventListener('click', () => {
   if (window.innerWidth <= 768) {
     sidebar.classList.add('collapsed');
+    sidebarToggle.style.display = 'flex';
   }
  }); 
 
