@@ -1380,7 +1380,7 @@ function applyFilters() {
     
     if (filters.energyStarOnly && b.energyStarScore === null) return false;
     
-    if (!selectAllActive && filters.selectedTypes.length > 0 && !filters.selectedTypes.includes(b.propertyType)) return false;
+    if (!selectAllActive && (filters.selectedTypes.length === 0 || !filters.selectedTypes.includes(b.propertyType))) return false;
     
     if (filters.search) {
       const q = filters.search.toLowerCase();
