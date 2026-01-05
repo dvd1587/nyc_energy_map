@@ -444,11 +444,34 @@
     
     .leaflet-control-zoom a { background: var(--bg-secondary) !important; color: var(--text-primary) !important; border-color: var(--border-color) !important; }
     .leaflet-control-zoom a:hover { background: var(--bg-tertiary) !important; }
+
+    .sidebar-toggle {
+        display: none; position: absolute; top: 10px; right: -50px;
+        width: 40px; height: 40px; background: var(--bg-secondary);
+        border: 1px solid var(--border-color); border-radius: 8px; color: var(--text-primary);
+        cursor: pointer; z-index: 1001; align-items: center; justify-content: center;
+    }
+
+    .sidebar-toggle:hover { background: var(--bg-tertiary); }
+
+    @media (max-width: 768px) {
+        .sidebar { position: absolute; left: 0; top: 0; height: 100%; z-index: 1000; transition: transform 0.3s ease; }
+        .sidebar.collapsed { transform: translateX(-100%); }
+        .sidebar-toggle { display: flex; }
+        .sidebar.collapsed .sidebar-toggle { right: -50px; }
+        .search-bar { left: 60px; }
+        .sidebar.collapsed ~ .map-area .search-bar { left: 10px; }
+    }
   </style>
 </head>
 <body>
   <div class="app">
-    <div class="sidebar">
+    <div class="sidebar" id="sidebar">
+        <button class="sidebar-toggle" id="sidebarToggle">
+            <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path d="M3 12h18M3 6h18M3 18h18"/>
+            </svg>
+        </button>
       <div class="header">
         <div class="header-content">
           <div class="header-icon">
@@ -637,7 +660,7 @@
 // ============================================================================
 const API_URL = 'https://data.cityofnewyork.us/api/v3/views/5zyy-y8am/query.json';
 const APP_TOKEN = '5U3PdX83pjEizBSCi3g28npTj';
-const PAGE_SIZE = 50000;
+const PAGE_SIZE = 25000;
 
 const SELECT_FIELDS = [
   'property_id', 'property_name', 'address_1', 'borough',
@@ -1149,6 +1172,18 @@ function initUI() {
   
   document.getElementById('resetBtn').addEventListener('click', resetFilters);
   document.getElementById('downloadBtn').addEventListener('click', downloadCSV);
+    
+  const sidebar = document.getElementById('sidebar');
+  const sidebarToggle = document.getElementById('sidebarToggle');
+    
+  sidebarToggle.addEventListener('click', () => {
+    sidebar.classList.toggle('collapsed');
+    });
+
+ // Auto-collapse on mobile
+  if (window.innerWidth <= 768) {
+    sidebar.classList.add('collapsed');
+  }
 }
 
 function updateSlidersFromData() {
@@ -1361,18 +1396,18 @@ function initMap() {
   markersLayer = L.markerClusterGroup({
     maxClusterRadius: 50, spiderfyOnMaxZoom: true, showCoverageOnHover: false,
     iconCreateFunction: cluster => {
-      const count = cluster.getChildCount();
-      const size = count > 100 ? 52 : count > 10 ? 44 : 36;
+        const count = cluster.getChildCount();
+        const size = count > 100 ? 52 : count > 10 ? 44 : 36;
   
-      const markers = cluster.getAllChildMarkers();
-      const values = markers.map(m => m.metricValue).filter(v => v !== null && v !== undefined);
-      const avg = values.length > 0 ? values.reduce((a, b) => a + b, 0) / values.length : null;
-      const color = getMarkerColor(avg, currentMetric);
+        const markers = cluster.getAllChildMarkers();
+        const values = markers.map(m => m.metricValue).filter(v => v !== null && v !== undefined);
+        const avg = values.length > 0 ? values.reduce((a, b) => a + b, 0) / values.length : null;
+        const color = getMarkerColor(avg, currentMetric);
   
-      return L.divIcon({
-        html: `<div style="background:${color};width:${size}px;height:${size}px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-weight:700;font-size:${count>100?13:11}px;border:3px solid rgba(255,255,255,0.9);box-shadow:0 4px 12px rgba(0,0,0,0.35)">${count}</div>`,
-        className: '', iconSize: [size, size]
-      });
+        return L.divIcon({
+         html: `<div style="background:${color};width:${size}px;height:${size}px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-weight:700;font-size:${count>100?13:11}px;border:3px solid rgba(255,255,255,0.9);box-shadow:0 4px 12px rgba(0,0,0,0.35)">${count}</div>`,
+         className: '', iconSize: [size, size]
+         });
     }
   });
   
