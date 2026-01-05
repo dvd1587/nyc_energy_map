@@ -1301,8 +1301,9 @@ function updateYearDropdown() {
 }
 
 function updatePropertyTypes() {
+  const yearData = allBuildings.filter(b => b.dataYear == filters.year);
   const counts = {};
-  filteredBuildings.forEach(b => { 
+  yearData.forEach(b => {
     const type = b.propertyType || 'Not Specified';
     counts[type] = (counts[type] || 0) + 1; 
   });
@@ -1317,7 +1318,7 @@ function updatePropertyTypes() {
   let html = `<div class="select-all-row" onclick="toggleSelectAll()">
     <div class="property-checkbox ${selectAllActive ? 'checked' : ''}">${checkIcon}</div>
     <span class="property-type-name">Select All</span>
-    <span class="property-type-count">${filteredBuildings.length.toLocaleString()}</span>
+    <span class="property-type-count">${yearData.length.toLocaleString()}</span>
   </div>`;
   
   html += top20.map(([type, count]) => {
