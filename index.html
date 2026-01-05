@@ -1351,7 +1351,8 @@ function resetFilters() {
 }
 
 function initMap() {
-  map = L.map('map').setView([40.7128, -74.006], 11);
+  map = L.map('map', { zoomControl: false }).setView([40.7128, -74.006], 11);
+  L.control.zoom({ position: 'bottomleft' }).addTo(map);
   
   L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
     attribution: '© OpenStreetMap © CARTO', maxZoom: 19
