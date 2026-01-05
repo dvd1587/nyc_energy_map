@@ -1180,12 +1180,21 @@ function initUI() {
     
   sidebarToggle.addEventListener('click', () => {
     sidebar.classList.toggle('collapsed');
+    sidebarToggle.classist.toggle('active');
     });
 
  // Auto-collapse on mobile
   if (window.innerWidth <= 768) {
     sidebar.classList.add('collapsed');
   }
+
+ // Handle resize
+  window.addEventListener('resize', () => {
+    if (window.innerWidth > 768) {
+      sidebar.classList.remove('collapsed');
+      sidebarToggle.classList.remove('active');
+    }  
+  }); 
 }
 
 function updateSlidersFromData() {
