@@ -1362,8 +1362,14 @@ function initMap() {
     iconCreateFunction: cluster => {
       const count = cluster.getChildCount();
       const size = count > 100 ? 52 : count > 10 ? 44 : 36;
+  
+      const markers = cluster.getAllChildMarkers();
+      const values = markers.map(m => m.metricValue).filter(v => v !== null && v !== undefined);
+      const avg = values.length > 0 ? values.reduce((a, b) => a + b, 0) / values.length : null;
+      const color = getMarkerColor(avg, currentMetric);
+  
       return L.divIcon({
-        html: `<div style="background:linear-gradient(135deg,#10b981,#34d399);width:${size}px;height:${size}px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#0f1a14;font-weight:700;font-size:${count>100?13:11}px;border:3px solid rgba(255,255,255,0.9);box-shadow:0 4px 12px rgba(16,185,129,0.35)">${count}</div>`,
+        html: `<div style="background:${color};width:${size}px;height:${size}px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-weight:700;font-size:${count>100?13:11}px;border:3px solid rgba(255,255,255,0.9);box-shadow:0 4px 12px rgba(0,0,0,0.35)">${count}</div>`,
         className: '', iconSize: [size, size]
       });
     }
@@ -1385,6 +1391,7 @@ function updateMap() {
     const marker = L.circleMarker([b.lat, b.lng], {
       radius: 7, fillColor: color, color: 'rgba(255,255,255,0.8)', weight: 2, fillOpacity: 0.9
     });
+    marker.metricValue = val;
     
     marker.bindPopup(`<div class="popup">
       <div class="popup-header">
