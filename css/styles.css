@@ -480,3 +480,12 @@ body {
     padding-left: 65px;
   }
 }
+
+/* Busy cursor state */
+body.busy {
+  cursor: wait;
+}
+
+body.busy * {
+  cursor: wait !important;
+}
