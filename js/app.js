@@ -185,6 +185,10 @@ function updateSlidersFromData(sliderInstances) {
 // ============================================================================
 
 function downloadCSV() {
+
+  //Apply - Busy
+  document.body.classList.add('busy');
+  
   if (filteredBuildings.length === 0) return;
   
   const headers = ['Name','Address','Borough','BBL','Type','Year Built','Floor Area','Site EUI','Source EUI','WUI','GHG Intensity','ENERGY STAR Rating','Report Year','Lat','Lng'];
@@ -202,6 +206,9 @@ function downloadCSV() {
   a.download = `nyc_building_energy_${filters.year}_${new Date().toISOString().slice(0,10)}.csv`;
   a.click();
   URL.revokeObjectURL(url);
+
+//Close - Busy
+  document.body.classList.remove('busy');
 }
 
 // ============================================================================
