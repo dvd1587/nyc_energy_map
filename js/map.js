@@ -59,6 +59,7 @@ export function updateMap() {
   document.body.classList.add('busy');
   
   if (!map || !markersLayer) {
+    //Close - Busy
     document.body.classList.remove('busy');
     return;
   }
