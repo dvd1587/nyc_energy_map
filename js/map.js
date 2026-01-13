@@ -54,7 +54,14 @@ export function initMap() {
 // ============================================================================
 
 export function updateMap() {
-  if (!map || !markersLayer) return;
+
+//Apply - Busy
+  document.body.classList.add('busy');
+  
+  if (!map || !markersLayer) {
+    document.body.classList.remove('busy');
+    return;
+  }
   markersLayer.clearLayers();
   
   const m = METRICS[currentMetric];
@@ -96,6 +103,9 @@ export function updateMap() {
     
     markersLayer.addLayer(marker);
   });
+
+//Close - Busy
+  document.body.classList.remove('busy');
 }
 
 // ============================================================================
