@@ -39,6 +39,10 @@ export async function fetchPage(pageNumber) {
 }
 
 export async function fetchAllData() {
+
+  // Busy - start
+  document.body.classList.add('busy');
+  
   const loadingText = document.getElementById('loadingSubtext');
   
   try {
@@ -82,10 +86,15 @@ export async function fetchAllData() {
     const buildings = transformApiData(allData);
     
     loadingText.textContent = `Loaded ${buildings.length.toLocaleString()} buildings`;
+
+    //Remove Busy - Success
+    document.body.classList.remove('busy');
     
     return buildings;
     
   } catch (error) {
+    //Remove Busy - Failure
+    document.body.classList.remove('busy');
     console.error('API fetch error:', error);
     throw error;
   }
