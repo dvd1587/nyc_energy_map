@@ -10,6 +10,9 @@ import { updateMap } from './map.js';
 // ============================================================================
 
 export function applyFilters() {
+// Apply - Busy
+  document.body.classList.add('busy');
+  
   // First filter by year (required)
   let baseData = allBuildings.filter(b => b.dataYear == filters.year);
   
@@ -46,6 +49,9 @@ export function applyFilters() {
   updateStats();
   updatePropertyTypes();
   updateMap();
+
+  //Close - Busy
+  document.body.classList.remove('busy');
 }
 
 // ============================================================================
